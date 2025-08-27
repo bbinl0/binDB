@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from binDB.smartdb import SmartBinDB
 
 app = Flask(__name__)
@@ -6,12 +6,7 @@ db = SmartBinDB()
 
 @app.route('/')
 def home():
-    return jsonify({
-        "status": "SUCCESS",
-        "message": "Welcome to binDB API. Use /api/bin, /api/bank, or /api/country endpoints.",
-        "api_owner": "@ISmartCoder",
-        "api_channel": "@TheSmartDev"
-    })
+    return render_template('index.html')
 
 @app.route('/api/bin/<string:bin_number>', methods=['GET'])
 def get_bin_info_api(bin_number):
