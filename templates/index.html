@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>binDB API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+        }
+        pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .api-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .api-section:last-child {
+            border-bottom: none;
+        }
+        .endpoint {
+            background-color: #e9f7ef;
+            border-left: 5px solid #28a745;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .endpoint h3 {
+            margin-top: 0;
+            color: #28a745;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .path {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .test-section {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .test-section h2 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        .test-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .test-form input[type="text"],
+        .test-form input[type="number"],
+        .test-form select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .test-form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .test-form button:hover {
+            background-color: #0056b3;
+        }
+        .response-area {
+            margin-top: 20px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>binDB API Documentation & Tester</h1>
+        <p>API Owner: @no_coder_pro, API Channel: @no_coder_xone</p>
+
+        <div class="test-section">
+            <h2>API Testing Section</h2>
+            <form id="api-test-form" class="test-form">
+                <label for="endpoint-select">Select Endpoint:</label>
+                <select id="endpoint-select">
+                    <option value="bin">/api/bin/{bin_number}</option>
+                    <option value="bank">/api/bank/{bank_name}</option>
+                    <option value="country">/api/country/{country_code}</option>
+                </select>
+
+                <div id="bin-input" class="input-group">
+                    <label for="bin-number">BIN Number:</label>
+                    <input type="text" id="bin-number" placeholder="e.g., 45717360">
+                </div>
+
+                <div id="bank-input" class="input-group" style="display: none;">
+                    <label for="bank-name">Bank Name:</label>
+                    <input type="text" id="bank-name" placeholder="e.g., JPMorgan Chase">
+                    <label for="bank-limit">Limit (optional):</label>
+                    <input type="number" id="bank-limit" placeholder="e.g., 5">
+                </div>
+
+                <div id="country-input" class="input-group" style="display: none;">
+                    <label for="country-code">Country Code (ISO A2):</label>
+                    <input type="text" id="country-code" placeholder="e.g., US">
+                    <label for="country-limit">Limit (optional):</label>
+                    <input type="number" id="country-limit" placeholder="e.g., 5">
+                </div>
+
+                <button type="submit">Test API</button>
+            </form>
+            <div class="response-area" id="api-response">
+                API Response will appear here...
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>API Endpoints</h2>
+            <p>Base URL: <code id="base-url"></code></p>
+
+            <div class="endpoint">
+                <h3><span class="method">GET</span> <span class="path">/api/bin/{bin_number}</span></h3>
+                <p>Retrieves detailed information for a specific Bank Identification Number (BIN).</p>
+                <h4>Parameters:</h4>
+                <ul>
+                    <li><code>bin_number</code> (path): The 6-8 digit BIN to look up.</li>
+                </ul>
+                <h4>Example Request:</h4>
+                <pre><code>GET /api/bin/45717360</code></pre>
+                <h4>Example Response:</h4>
+                <pre><code>{
+    "status": "SUCCESS",
+    "data": [
+        {
+            "bin": "45717360",
+            "brand": "VISA",
+            "category": "DEBIT",
+            "CardTier": "DEBIT VISA",
+            "country_code": "US",
+            "Type": "DEBIT",
+            "country_code_alpha3": "USA",
+            "Country": {
+                "A2": "US",
+                "A3": "USA",
+                "N3": "840",
+                "Name": "United States",
+                "Cont": "North America"
+            },
+            "issuer": "JPMORGAN CHASE BANK, N.A.",
+            "phone": "1-800-242-7372",
+            "type": "DEBIT",
+            "website": "www.jpmorganchase.com"
+        }
+    ],
+    "count": 1,
+    "filtered_by": "bin",
+    "Luhn": true
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method">GET</span> <span class="path">/api/bank/{bank_name}</span></h3>
+                <p>Retrieves BINs associated with a specific bank name.</p>
+                <h4>Parameters:</h4>
+                <ul>
+                    <li><code>bank_name</code> (path): The name or partial name of the bank.</li>
+                    <li><code>limit</code> (query, optional): Maximum number of results to return.</li>
+                </ul>
+                <h4>Example Request:</h4>
+                <pre><code>GET /api/bank/JPMorgan Chase?limit=2</code></pre>
+                <h4>Example Response:</h4>
+                <pre><code>{
+    "status": "SUCCESS",
+    "data": [
+        {
+            "bin": "45717360",
+            "brand": "VISA",
+            "category": "DEBIT",
+            "CardTier": "DEBIT VISA",
+            "country_code": "US",
+            "Type": "DEBIT",
+            "country_code_alpha3": "USA",
+            "Country": {
+                "A2": "US",
+                "A3": "USA",
+                "N3": "840",
+                "Name": "United States",
+                "Cont": "North America"
+            },
+            "issuer": "JPMORGAN CHASE BANK, N.A.",
+            "phone": "1-800-242-7372",
+            "type": "DEBIT",
+            "website": "www.jpmorganchase.com"
+        },
+        {
+            "bin": "414709",
+            "brand": "VISA",
+            "category": "CREDIT",
+            "CardTier": "CREDIT VISA",
+            "country_code": "US",
+            "Type": "CREDIT",
+            "country_code_alpha3": "USA",
+            "Country": {
+                "A2": "US",
+                "A3": "USA",
+                "N3": "840",
+                "Name": "United States",
+                "Cont": "North America"
+            },
+            "issuer": "JPMORGAN CHASE BANK, N.A.",
+            "phone": "1-800-242-7372",
+            "type": "CREDIT",
+            "website": "www.jpmorganchase.com"
+        }
+    ],
+    "count": 2,
+    "filtered_by": "bank",
+    "Luhn": true
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method">GET</span> <span class="path">/api/country/{country_code}</span></h3>
+                <p>Retrieves BINs for a specific country code.</p>
+                <h4>Parameters:</h4>
+                <ul>
+                    <li><code>country_code</code> (path): The two-letter ISO country code (e.g., 'US', 'GB').</li>
+                    <li><code>limit</code> (query, optional): Maximum number of results to return.</li>
+                </ul>
+                <h4>Example Request:</h4>
+                <pre><code>GET /api/country/BD?limit=3</code></pre>
+                <h4>Example Response:</h4>
+                <pre><code>{
+    "status": "SUCCESS",
+    "data": [
+        {
+            "bin": "400000",
+            "brand": "VISA",
+            "category": "DEBIT",
+            "CardTier": "DEBIT VISA",
+            "country_code": "BD",
+            "Type": "DEBIT",
+            "country_code_alpha3": "BGD",
+            "Country": {
+                "A2": "BD",
+                "A3": "BGD",
+                "N3": "050",
+                "Name": "Bangladesh",
+                "Cont": "Asia"
+            },
+            "issuer": "BANK ASIA LIMITED",
+            "phone": "16205",
+            "type": "DEBIT",
+            "website": "www.bankasia-bd.com"
+        },
+        {
+            "bin": "400001",
+            "brand": "VISA",
+            "category": "CREDIT",
+            "CardTier": "CREDIT VISA",
+            "country_code": "BD",
+            "Type": "CREDIT",
+            "country_code_alpha3": "BGD",
+            "Country": {
+                "A2": "BD",
+                "A3": "BGD",
+                "N3": "050",
+                "Name": "Bangladesh",
+                "Cont": "Asia"
+            },
+            "issuer": "EASTERN BANK LIMITED",
+            "phone": "16230",
+            "type": "CREDIT",
+            "website": "www.ebl.com.bd"
+        },
+        {
+            "bin": "400002",
+            "brand": "VISA",
+            "category": "DEBIT",
+            "CardTier": "DEBIT VISA",
+            "country_code": "BD",
+            "Type": "DEBIT",
+            "country_code_alpha3": "BGD",
+            "Country": {
+                "A2": "BD",
+                "A3": "BGD",
+                "N3": "050",
+                "Name": "Bangladesh",
+                "Cont": "Asia"
+            },
+            "issuer": "STANDARD BANK LIMITED",
+            "phone": "16205",
+            "type": "DEBIT",
+            "website": "www.standardbankbd.com"
+        }
+    ],
+    "count": 3,
+    "filtered_by": "country",
+    "Luhn": true
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const endpointSelect = document.getElementById('endpoint-select');
+            const binInput = document.getElementById('bin-input');
+            const bankInput = document.getElementById('bank-input');
+            const countryInput = document.getElementById('country-input');
+            const apiTestForm = document.getElementById('api-test-form');
+            const apiResponse = document.getElementById('api-response');
+            const baseUrlElement = document.getElementById('base-url');
+
+            // Set base URL dynamically
+            baseUrlElement.textContent = window.location.origin;
+
+            function toggleInputs() {
+                binInput.style.display = 'none';
+                bankInput.style.display = 'none';
+                countryInput.style.display = 'none';
+
+                switch (endpointSelect.value) {
+                    case 'bin':
+                        binInput.style.display = 'block';
+                        break;
+                    case 'bank':
+                        bankInput.style.display = 'block';
+                        break;
+                    case 'country':
+                        countryInput.style.display = 'block';
+                        break;
+                }
+            }
+
+            endpointSelect.addEventListener('change', toggleInputs);
+            toggleInputs(); // Initialize inputs based on default selection
+
+            apiTestForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                apiResponse.textContent = 'Loading...';
+
+                let url = '';
+                const selectedEndpoint = endpointSelect.value;
+                const baseUrl = window.location.origin;
+
+                try {
+                    if (selectedEndpoint === 'bin') {
+                        const binNumber = document.getElementById('bin-number').value;
+                        if (!binNumber) throw new Error('BIN Number is required.');
+                        url = `${baseUrl}/api/bin/${binNumber}`;
+                    } else if (selectedEndpoint === 'bank') {
+                        const bankName = document.getElementById('bank-name').value;
+                        const limit = document.getElementById('bank-limit').value;
+                        if (!bankName) throw new Error('Bank Name is required.');
+                        url = `${baseUrl}/api/bank/${encodeURIComponent(bankName)}`;
+                        if (limit) {
+                            url += `?limit=${limit}`;
+                        }
+                    } else if (selectedEndpoint === 'country') {
+                        const countryCode = document.getElementById('country-code').value;
+                        const limit = document.getElementById('country-limit').value;
+                        if (!countryCode) throw new Error('Country Code is required.');
+                        url = `${baseUrl}/api/country/${countryCode.toUpperCase()}`;
+                        if (limit) {
+                            url += `?limit=${limit}`;
+                        }
+                    }
+
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    apiResponse.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    apiResponse.textContent = `Error: ${error.message}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
