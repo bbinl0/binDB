@@ -1,0 +1,4 @@
+Flask
+binDB
+pycountry
+pycountry-convert
