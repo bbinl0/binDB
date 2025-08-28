@@ -29,10 +29,22 @@ def get_bins_by_bank_api(bank_name):
 
 @app.route('/api/country/<string:country_code>', methods=['GET'])
 def get_bins_by_country_api(country_code):
-    limit = request.args.get('limit', type=int)
+    # ইউজার limit নিলাম (ডিফল্ট = 20)
+    limit = request.args.get('limit', type=int, default=20)
+
+    # যদি limit > 20 হয় তাহলে শুধু মেসেজ পাঠাবে
+    if limit > 20:
+        return jsonify({
+            "error": "সর্বোচ্চ 20 টা পর্যন্ত রেজাল্ট নেওয়া যাবে। অনুগ্রহ করে 20 বা তার কম ব্যবহার করুন।",
+            **API_CREDITS
+        }), 400  # Bad Request
+
+    # নাহলে ডাটাবেজ থেকে limit সংখ্যক ডেটা রিটার্ন করবে
     result = db.get_bins_by_country(country_code, limit)
-    result.update(API_CREDITS) # ফলাফলের সাথে ক্রেডিটের তথ্য যোগ করা হলো
+    result.update(API_CREDITS)
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
